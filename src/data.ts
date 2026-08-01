@@ -3,14 +3,14 @@ import type { Card, Category } from './types'
 const c = (id: string, vietnamese: string, german: string, english: string, phonetic: string, syllables: string, note: string, category: Category): Card => ({ id, vietnamese, german, english, phonetic, syllables, note, category })
 
 export const starterCards: Card[] = [
-  c('hello', 'Chào em', 'Hallo (zu einer jüngeren Frau)', 'Hello (to a younger woman)', 'tschao em', 'Chào · em', 'Eine warme, alltägliche Begrüßung für deine Frau.', 'Begrüßung'),
+  c('hello', 'Chào em', 'Hallo (zu einer jüngeren Frau)', 'Hello (to a younger woman)', 'tschao em', 'Chào · em', 'Eine warme, alltägliche Begrüßung für eine jüngere Frau.', 'Begrüßung'),
   c('hello-you', 'Chào anh', 'Hallo (zu einem älteren Mann)', 'Hello (to an older man)', 'tschao anj', 'Chào · anh', 'Die Anrede ist im Vietnamesischen wichtig und freundlich.', 'Begrüßung'),
   c('good-morning', 'Chào buổi sáng', 'Guten Morgen', 'Good morning', 'tschao bui säng', 'Chào · buổi · sáng', 'Passt morgens beim ersten Sehen.', 'Begrüßung'),
   c('good-night', 'Ngủ ngon nhé', 'Schlaf gut', 'Sleep well', 'ngu ngon nje', 'Ngủ · ngon · nhé', 'Ein liebevoller Satz vor dem Schlafen.', 'Begrüßung'),
-  c('thank-you', 'Cảm ơn em', 'Danke', 'Thank you', 'kam ün em', 'Cảm · ơn · em', 'Mit der Anrede klingt ein Danke persönlich.', 'Begrüßung'),
+  c('thank-you', 'Cảm ơn em', 'Danke', 'Thank you', 'kam ün em', 'Cảm · ơn · em', 'Mit einer passenden Anrede klingt ein Danke besonders herzlich.', 'Begrüßung'),
   c('sorry', 'Xin lỗi nhé', 'Entschuldigung', 'Sorry', 'sin loi nje', 'Xin · lỗi · nhé', 'Freundlich für kleine Missgeschicke.', 'Begrüßung'),
   c('please', 'Làm ơn', 'Bitte', 'Please', 'lam ün', 'Làm · ơn', 'Für Bitten; im Alltag oft zusammen mit einer Anrede.', 'Begrüßung'),
-  c('see-you', 'Hẹn gặp lại', 'Bis bald', 'See you again', 'hen gap lai', 'Hẹn · gặp · lại', 'Beim Abschied, wenn ihr euch wiederseht.', 'Begrüßung'),
+  c('see-you', 'Hẹn gặp lại', 'Bis bald', 'See you again', 'hen gap lai', 'Hẹn · gặp · lại', 'Ein natürlicher Abschied, wenn man sich wiedersehen wird.', 'Begrüßung'),
   c('how-are-you', 'Em khỏe không?', 'Wie geht es dir?', 'How are you?', 'em kwee kong', 'Em · khỏe · không', 'Eine einfache, aufmerksame Frage.', 'Begrüßung'),
   c('im-fine', 'Anh khỏe', 'Mir geht es gut', 'I am well', 'anj kwee', 'Anh · khỏe', 'Passe die Anrede an deine Rolle in der Familie an.', 'Begrüßung'),
 
@@ -22,7 +22,7 @@ export const starterCards: Card[] = [
   c('grandpa', 'Ông', 'Opa', 'Grandfather', 'ong', 'Ông', 'Respektvolle Familienanrede.', 'Familie'),
   c('child', 'Con', 'Kind', 'Child', 'kon', 'Con', 'Auch eine Anrede von Älteren an Jüngere.', 'Familie'),
   c('family', 'Gia đình', 'Familie', 'Family', 'ja ding', 'Gia · đình', 'Nützlich bei Gesprächen über Verwandte.', 'Familie'),
-  c('i-love-you', 'Anh yêu em', 'Ich liebe dich', 'I love you', 'anj jeu em', 'Anh · yêu · em', 'Für einen Mann zu seiner jüngeren Partnerin; Anreden anpassen.', 'Familie'),
+  c('i-love-you', 'Anh yêu em', 'Ich liebe dich', 'I love you', 'anj jeu em', 'Anh · yêu · em', 'Für einen Mann zu einer jüngeren Partnerin; Anreden bei Bedarf anpassen.', 'Familie'),
   c('miss-you', 'Anh nhớ em', 'Ich vermisse dich', 'I miss you', 'anj njö em', 'Anh · nhớ · em', 'Ein kurzer, sehr alltäglicher liebevoller Satz.', 'Familie'),
 
   c('home', 'Nhà', 'Zuhause/Haus', 'Home/house', 'nja', 'Nhà', 'Für euer Zuhause oder ein Haus.', 'Zuhause'),
@@ -49,10 +49,10 @@ export const starterCards: Card[] = [
 
   c('can-you', 'Em có thể... không?', 'Kannst du ...?', 'Can you ...?', 'em ko teh kong', 'Em · có · thể · không', 'Ein höfliches Fragemuster für konkrete Bitten.', 'Bitten'),
   c('say-again', 'Nói lại đi', 'Sag es noch einmal', 'Say it again', 'noi lai di', 'Nói · lại · đi', 'Sehr nützlich, wenn du etwas nicht verstanden hast.', 'Bitten'),
-  c('slower', 'Nói chậm hơn nhé', 'Sprich bitte langsamer', 'Speak slower, please', 'noi tscham hün nje', 'Nói · chậm · hơn · nhé', 'Dein wichtigster Satz für entspannte Gespräche.', 'Bitten'),
+  c('slower', 'Nói chậm hơn nhé', 'Sprich bitte langsamer', 'Speak slower, please', 'noi tscham hün nje', 'Nói · chậm · hơn · nhé', 'Ein besonders hilfreicher Satz für entspannte Gespräche.', 'Bitten'),
   c('dont-understand', 'Anh không hiểu', 'Ich verstehe nicht', 'I do not understand', 'anj kong hieu', 'Anh · không · hiểu', 'Ehrlich und besser als nur zu nicken.', 'Bitten'),
   c('what-does', 'Nghĩa là gì?', 'Was bedeutet das?', 'What does that mean?', 'ngjia la si', 'Nghĩa · là · gì', 'Du kannst davor auf ein Wort zeigen.', 'Bitten'),
-  c('teach-me', 'Dạy anh đi', 'Bring es mir bei', 'Teach me', 'jai anj di', 'Dạy · anh · đi', 'Eine einladende Bitte an deine Frau.', 'Bitten'),
+  c('teach-me', 'Dạy anh đi', 'Bring es mir bei', 'Teach me', 'jai anj di', 'Dạy · anh · đi', 'Eine freundliche Einladung, gemeinsam zu üben.', 'Bitten'),
   c('write-it', 'Viết cho anh nhé', 'Schreib es mir bitte auf', 'Write it down for me', 'wiet tscho anj nje', 'Viết · cho · anh · nhé', 'Ideal, um später eine persönliche Karte anzulegen.', 'Bitten'),
   c('one-more', 'Một lần nữa', 'Noch einmal', 'One more time', 'mot lan nüa', 'Một · lần · nữa', 'Für Wiederholung, auch beim Üben.', 'Bitten'),
   c('i-try', 'Anh thử nhé', 'Ich versuche es', 'I’ll try', 'anj tü nje', 'Anh · thử · nhé', 'Nimmt Druck aus einer schwierigen Übung.', 'Bitten'),

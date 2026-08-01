@@ -20,6 +20,7 @@ export type StoredState = {
   progress: ProgressMap
   personalCards: Card[]
   goal: number
+  voiceId?: string
 }
 
 export type Page = 'home' | 'learn' | 'topics' | 'tones' | 'personal'

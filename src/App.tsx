@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { categories, starterCards } from './data'
-import { speak, vietnameseVoice } from './audio'
+import { speak, vietnameseVoice, vietnameseVoices } from './audio'
 import { createPersonalCard, loadState, resetState, saveState } from './storage'
 import type { Card, Page, StoredState } from './types'
 
@@ -41,7 +41,7 @@ function useRecording() {
   return { recording, clip, toggle, clear: () => setClip(null) }
 }
 
-function CardView({ card, onRate, compact = false }: { card: Card; onRate?: (rating: number) => void; compact?: boolean }) {
+function CardView({ card, onRate, compact = false, voiceId }: { card: Card; onRate?: (rating: number) => void; compact?: boolean; voiceId?: string }) {
   const [slow, setSlow] = useState(false)
   const [voiceNotice, setVoiceNotice] = useState(false)
   const [recordError, setRecordError] = useState('')
@@ -49,7 +49,7 @@ function CardView({ card, onRate, compact = false }: { card: Card; onRate?: (rat
 
   const play = (isSlow = false, word?: string) => {
     setSlow(isSlow)
-    setVoiceNotice(!speak(word ?? card.vietnamese, isSlow))
+    setVoiceNotice(!speak(word ?? card.vietnamese, isSlow, voiceId))
   }
   const record = async () => {
     try { setRecordError(''); await toggle() }
@@ -78,7 +78,7 @@ function CardView({ card, onRate, compact = false }: { card: Card; onRate?: (rat
   </article>
 }
 
-function Tones() {
+function Tones({ voiceId }: { voiceId?: string }) {
   const rows = [
     ['ngang', 'ma', 'keine Markierung', 'eben und ruhig'],
     ['sắc', 'má', '´', 'klar nach oben'],
@@ -87,7 +87,7 @@ function Tones() {
     ['ngã', 'mã', '~', 'im Süden oft nahe bei hỏi'],
     ['nặng', 'mạ', '.', 'kurz, tief und mit Stopp']
   ]
-  return <section className="page tones-page"><header className="page-heading"><span className="eyebrow">GRUNDLAGE</span><h1>Töne machen Bedeutung.</h1><p>Die Buchstaben bleiben ähnlich, der Ton verändert das Wort. Höre erst den Verlauf – Perfektion kommt später.</p></header><div className="tone-callout"><span>✦</span><p><strong>Südlicher Fokus:</strong> Im Alltag Südvietnams klingen <em>hỏi</em> und <em>ngã</em> häufig sehr ähnlich. Du lernst beide Schreibweisen, übst aber keinen künstlichen Unterschied.</p></div><div className="tone-list">{rows.map(([name, example, sign, description]) => <div className="tone-row" key={name}><button onClick={() => speak(example, true)} aria-label={`${example} hören`}>▶</button><div><strong>{name}</strong><span>{description}</span></div><b>{example}</b><i>{sign}</i></div>)}</div><div className="tip-card"><h2>So übst du ohne Stress</h2><ol><li>Tippe auf ▶ und höre nur zu.</li><li>Sprich die Silbe im gleichen Rhythmus nach.</li><li>Nimm dich erst dann auf – nicht jeder Versuch muss gut sein.</li></ol></div></section>
+  return <section className="page tones-page"><header className="page-heading"><span className="eyebrow">GRUNDLAGE</span><h1>Töne machen Bedeutung.</h1><p>Die Buchstaben bleiben ähnlich, der Ton verändert das Wort. Höre erst den Verlauf – Perfektion kommt später.</p></header><div className="tone-callout"><span>✦</span><p><strong>Südlicher Fokus:</strong> Im Alltag Südvietnams klingen <em>hỏi</em> und <em>ngã</em> häufig sehr ähnlich. Du lernst beide Schreibweisen, übst aber keinen künstlichen Unterschied.</p></div><div className="tone-list">{rows.map(([name, example, sign, description]) => <div className="tone-row" key={name}><button onClick={() => speak(example, true, voiceId)} aria-label={`${example} hören`}>▶</button><div><strong>{name}</strong><span>{description}</span></div><b>{example}</b><i>{sign}</i></div>)}</div><div className="tip-card"><h2>So übst du ohne Stress</h2><ol><li>Tippe auf ▶ und höre nur zu.</li><li>Sprich die Silbe im gleichen Rhythmus nach.</li><li>Nimm dich erst dann auf – nicht jeder Versuch muss gut sein.</li></ol></div></section>
 }
 
 function Personal({ state, update }: { state: StoredState; update: (next: StoredState) => void }) {
@@ -102,7 +102,15 @@ function Personal({ state, update }: { state: StoredState; update: (next: Stored
     update({ ...state, personalCards: [card, ...state.personalCards] })
     event.currentTarget.reset(); setShowForm(false)
   }
-  return <section className="page personal-page"><header className="page-heading"><span className="eyebrow">DEINE FAMILIENSCHUBLADEN</span><h1>Wörter, die nur ihr braucht.</h1><p>Halte Formulierungen, Spitznamen und Dinge aus eurem Alltag fest. Alles bleibt auf diesem Gerät.</p></header><button className="primary full" onClick={() => setShowForm(!showForm)}>{showForm ? 'Formular schließen' : '+ Persönliche Karte hinzufügen'}</button>{showForm && <form className="personal-form" onSubmit={submit}><label>Vietnamesisch*<input name="vietnamese" placeholder="z. B. ăn cơm" required /></label><label>Deutsch*<input name="german" placeholder="z. B. essen" required /></label><label>Englisch<input name="english" placeholder="z. B. eat" /></label><label>Deine Lautnotiz<input name="phonetic" placeholder="z. B. an kəm" /></label><label>Wann sagt ihr das?<textarea name="note" placeholder="z. B. beim Abendessen" rows={2} /></label><button className="primary" type="submit">Karte speichern</button></form>}<div className="personal-list">{state.personalCards.length ? state.personalCards.map(card => <CardView card={card} compact key={card.id} />) : <div className="empty"><span>♡</span><h2>Noch ganz leer.</h2><p>Bitte deine Frau, dir ein Wort aufzuschreiben – und macht daraus eure erste Karte.</p></div>}</div></section>
+  return <section className="page personal-page"><header className="page-heading"><span className="eyebrow">EIGENE KARTEN</span><h1>Wörter, die für dich wichtig sind.</h1><p>Halte Formulierungen, Namen und Dinge aus deinem Alltag fest. Alles bleibt auf diesem Gerät.</p></header><button className="primary full" onClick={() => setShowForm(!showForm)}>{showForm ? 'Formular schließen' : '+ Persönliche Karte hinzufügen'}</button>{showForm && <form className="personal-form" onSubmit={submit}><label>Vietnamesisch*<input name="vietnamese" placeholder="z. B. ăn cơm" required /></label><label>Deutsch*<input name="german" placeholder="z. B. essen" required /></label><label>Englisch<input name="english" placeholder="z. B. eat" /></label><label>Deine Lautnotiz<input name="phonetic" placeholder="z. B. an kəm" /></label><label>Wann sagt man das?<textarea name="note" placeholder="z. B. beim Abendessen" rows={2} /></label><button className="primary" type="submit">Karte speichern</button></form>}<div className="personal-list">{state.personalCards.length ? state.personalCards.map(card => <CardView card={card} compact key={card.id} voiceId={state.voiceId} />) : <div className="empty"><span>♡</span><h2>Noch ganz leer.</h2><p>Notiere ein Wort aus einem Gespräch oder einer Serie – und erstelle deine erste Karte.</p></div>}</div></section>
+}
+
+function VoicePicker({ voices, selectedId, onChange }: { voices: SpeechSynthesisVoice[]; selectedId?: string; onChange: (voiceId: string) => void }) {
+  return <div className="voice-picker">
+    <label htmlFor="voice-choice">Vietnamesische Stimme</label>
+    {voices.length ? <select id="voice-choice" value={selectedId ?? vietnameseVoice()?.voiceURI ?? ''} onChange={(event) => onChange(event.target.value)}>{voices.map((voice) => <option value={voice.voiceURI} key={voice.voiceURI}>{voice.name} · {voice.lang}</option>)}</select> : <p>Keine vietnamesische Systemstimme gefunden. Installiere eine Stimme in den Geräteeinstellungen.</p>}
+    <small>Die ausgewählte Stimme wird für jede Karte beibehalten.</small>
+  </div>
 }
 
 export default function App() {
@@ -111,11 +119,14 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [roundIndex, setRoundIndex] = useState(0)
   const [sessionCards, setSessionCards] = useState<Card[]>([])
-  const [voiceReady, setVoiceReady] = useState(Boolean(vietnameseVoice()))
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>(vietnameseVoices)
+  const [showVoicePicker, setShowVoicePicker] = useState(false)
+  const voiceReady = voices.length > 0
+  const selectedVoice = vietnameseVoice(state.voiceId)
   const allCards = useMemo(() => [...starterCards, ...state.personalCards], [state.personalCards])
 
   useEffect(() => { saveState(state) }, [state])
-  useEffect(() => { const refresh = () => setVoiceReady(Boolean(vietnameseVoice())); speechSynthesis?.addEventListener('voiceschanged', refresh); return () => speechSynthesis?.removeEventListener('voiceschanged', refresh) }, [])
+  useEffect(() => { const refresh = () => setVoices(vietnameseVoices()); speechSynthesis?.addEventListener('voiceschanged', refresh); return () => speechSynthesis?.removeEventListener('voiceschanged', refresh) }, [])
 
   const dueCards = useMemo(() => {
     const now = Date.now()
@@ -141,11 +152,12 @@ export default function App() {
   function openRound() { setSessionCards(freshRound); setRoundIndex(0); setPage('learn') }
   const topics = categories.map(category => ({ category, cards: allCards.filter(card => card.category === category) }))
 
-  return <main className="app-shell"><nav className="topbar"><button className="brand" onClick={() => setPage('home')}><span>chào</span><b>nhà</b></button><div className="voice-status"><span className={voiceReady ? 'dot ready' : 'dot'}></span>{voiceReady ? 'Vietnamesische Stimme bereit' : 'Gerätestimme prüfen'}</div></nav>
-    {page === 'home' && <section className="page home-page"><div className="hero"><span className="eyebrow">{dayLabel().toUpperCase()}</span><h1>Chào! <em>Ein kleines Stück Alltag</em> für euch zwei.</h1><p>Hören, nachsprechen, wiederholen. Kein Druck – nur ein paar Minuten heute.</p><button className="primary hero-button" onClick={openRound}>Meine Tagesrunde <span>→</span></button><div className="hero-shape shape-one"></div><div className="hero-shape shape-two"></div></div><div className="stat-row"><div><strong>{Math.min(round.length, state.goal)}</strong><span>heute bereit</span></div><div><strong>{learned}</strong><span>Wörter berührt</span></div><div><strong>5–10</strong><span>Minuten reichen</span></div></div><section className="home-section"><div className="section-label"><span>WEITERÜBEN</span><button onClick={() => setPage('topics')}>Alle Themen →</button></div><div className="topic-grid">{topics.slice(0, 4).map(({ category, cards }, index) => <button className={`topic topic-${index}`} key={category} onClick={() => { setSelectedCategory(category); setPage('topics') }}><span>{['☀', '♡', '⌂', '◌'][index]}</span><strong>{category}</strong><small>{cards.length} Karten</small></button>)}</div></section><section className="mini-tone"><div><span className="eyebrow">KLEINE ERINNERUNG</span><h2>Du musst nicht „perfekt“ klingen.</h2><p>Ein verständliches Wort, ein Lächeln und Nachfragen bringen euch weiter.</p></div><button onClick={() => setPage('tones')}>Töne üben →</button></section></section>}
-    {page === 'learn' && <section className="page learn-page"><header className="learn-header"><button className="back" onClick={() => setPage('home')}>← Heute</button><span>{Math.min(roundIndex + 1, round.length)} / {round.length}</span></header>{activeCard && roundIndex < round.length ? <><div className="round-progress"><i style={{ width: `${((roundIndex) / round.length) * 100}%` }}></i></div><p className="round-title">DEINE TAGESRUNDE</p><CardView card={activeCard} onRate={rate} /></> : <div className="finish"><span>✦</span><p className="eyebrow">FÜR HEUTE GESCHAFFT</p><h1>Sehr gut. Jetzt geh damit in den Alltag.</h1><p>Ein Satz beim Abendessen ist mehr wert als zehn perfekte Wiederholungen.</p><button className="primary" onClick={() => setPage('home')}>Zurück zu Heute</button></div>}</section>}
-    {page === 'topics' && <section className="page topics-page"><header className="page-heading"><span className="eyebrow">DEIN WORTSCHATZ</span><h1>Was passt gerade zu eurem Tag?</h1><p>Wähle ein Thema und höre einzelne Karten so oft du möchtest.</p></header><div className="filters"><button className={!selectedCategory ? 'selected' : ''} onClick={() => setSelectedCategory(null)}>Alle</button>{topics.map(({ category }) => <button className={selectedCategory === category ? 'selected' : ''} key={category} onClick={() => setSelectedCategory(category)}>{category}</button>)}</div><div className="cards-grid">{allCards.filter(card => !selectedCategory || card.category === selectedCategory).map(card => <CardView card={card} compact key={card.id} />)}</div></section>}
-    {page === 'tones' && <Tones />}
+  return <main className="app-shell"><nav className="topbar"><button className="brand" onClick={() => setPage('home')}><span>chào</span><b>nhà</b></button><button className="voice-status voice-control" onClick={() => setShowVoicePicker(open => !open)} aria-expanded={showVoicePicker}><span className={voiceReady ? 'dot ready' : 'dot'}></span>{voiceReady ? selectedVoice?.name ?? 'Stimme wählen' : 'Stimme einrichten'}</button></nav>
+    {showVoicePicker && <VoicePicker voices={voices} selectedId={state.voiceId} onChange={(voiceId) => update({ ...state, voiceId })} />}
+    {page === 'home' && <section className="page home-page"><div className="hero"><span className="eyebrow">{dayLabel().toUpperCase()}</span><h1>Chào! <em>Vietnamesisch für den Alltag,</em> Schritt für Schritt.</h1><p>Hören, nachsprechen, wiederholen. Kein Druck – nur ein paar Minuten heute.</p><button className="primary hero-button" onClick={openRound}>Meine Tagesrunde <span>→</span></button><div className="hero-shape shape-one"></div><div className="hero-shape shape-two"></div></div><div className="stat-row"><div><strong>{Math.min(round.length, state.goal)}</strong><span>heute bereit</span></div><div><strong>{learned}</strong><span>Wörter berührt</span></div><div><strong>5–10</strong><span>Minuten reichen</span></div></div><section className="home-section"><div className="section-label"><span>WEITERÜBEN</span><button onClick={() => setPage('topics')}>Alle Themen →</button></div><div className="topic-grid">{topics.slice(0, 4).map(({ category, cards }, index) => <button className={`topic topic-${index}`} key={category} onClick={() => { setSelectedCategory(category); setPage('topics') }}><span>{['☀', '♡', '⌂', '◌'][index]}</span><strong>{category}</strong><small>{cards.length} Karten</small></button>)}</div></section><section className="mini-tone"><div><span className="eyebrow">KLEINE ERINNERUNG</span><h2>Du musst nicht „perfekt“ klingen.</h2><p>Ein verständliches Wort, ein Lächeln und Nachfragen bringen dich weiter.</p></div><button onClick={() => setPage('tones')}>Töne üben →</button></section></section>}
+    {page === 'learn' && <section className="page learn-page"><header className="learn-header"><button className="back" onClick={() => setPage('home')}>← Heute</button><span>{Math.min(roundIndex + 1, round.length)} / {round.length}</span></header>{activeCard && roundIndex < round.length ? <><div className="round-progress"><i style={{ width: `${((roundIndex) / round.length) * 100}%` }}></i></div><p className="round-title">DEINE TAGESRUNDE</p><CardView card={activeCard} onRate={rate} voiceId={state.voiceId} /></> : <div className="finish"><span>✦</span><p className="eyebrow">FÜR HEUTE GESCHAFFT</p><h1>Sehr gut. Nimm das Wort mit in den Alltag.</h1><p>Ein Satz in einer echten Situation ist mehr wert als zehn perfekte Wiederholungen.</p><button className="primary" onClick={() => setPage('home')}>Zurück zu Heute</button></div>}</section>}
+    {page === 'topics' && <section className="page topics-page"><header className="page-heading"><span className="eyebrow">DEIN WORTSCHATZ</span><h1>Was passt gerade zu deinem Tag?</h1><p>Wähle ein Thema und höre einzelne Karten so oft du möchtest.</p></header><div className="filters"><button className={!selectedCategory ? 'selected' : ''} onClick={() => setSelectedCategory(null)}>Alle</button>{topics.map(({ category }) => <button className={selectedCategory === category ? 'selected' : ''} key={category} onClick={() => setSelectedCategory(category)}>{category}</button>)}</div><div className="cards-grid">{allCards.filter(card => !selectedCategory || card.category === selectedCategory).map(card => <CardView card={card} compact key={card.id} voiceId={state.voiceId} />)}</div></section>}
+    {page === 'tones' && <Tones voiceId={state.voiceId} />}
     {page === 'personal' && <Personal state={state} update={update} />}
     <nav className="bottom-nav"><button className={page === 'home' ? 'active' : ''} onClick={() => setPage('home')}><span>⌂</span>Heute</button><button className={page === 'topics' || page === 'learn' ? 'active' : ''} onClick={() => setPage('topics')}><span>▤</span>Wörter</button><button className={page === 'tones' ? 'active' : ''} onClick={() => setPage('tones')}><span>〰</span>Töne</button><button className={page === 'personal' ? 'active' : ''} onClick={() => setPage('personal')}><span>♡</span>Eigene</button></nav>
     <footer><button onClick={() => { if (confirm('Deinen lokalen Fortschritt und persönliche Karten wirklich löschen?')) { resetState(); setState(loadState()); setPage('home') } }}>Lokale Lerndaten zurücksetzen</button></footer>
