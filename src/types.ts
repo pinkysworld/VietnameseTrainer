@@ -12,15 +12,17 @@ export type Card = {
   isPersonal?: boolean
 }
 
-export type CardProgress = { interval: number; due: number; seen: number }
+export type CardProgress = { interval: number; due: number; seen: number; lapses?: number; lastReviewed?: number }
 export type ProgressMap = Record<string, CardProgress>
+export type StudyStats = { lastStudyDay?: string; currentStreak: number; bestStreak: number }
 
 export type StoredState = {
-  version: 1
+  version: 2
   progress: ProgressMap
   personalCards: Card[]
   goal: number
   voiceId?: string
+  stats: StudyStats
 }
 
-export type Page = 'home' | 'learn' | 'topics' | 'tones' | 'personal'
+export type Page = 'home' | 'learn' | 'topics' | 'tones' | 'personal' | 'listen' | 'dialogues' | 'addresses'

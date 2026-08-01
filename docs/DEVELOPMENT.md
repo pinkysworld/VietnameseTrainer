@@ -12,8 +12,9 @@ Die Anwendung ist eine statische React-18-/TypeScript-App, gebaut mit Vite. Sie 
 | Lokale Speicherung | `src/storage.ts` |
 | Datenformen | `src/types.ts` |
 | Gestaltung | `src/styles.css` |
+| Dialoge und Anrede-Szenarien | `src/practice.ts` |
 
-Der Startwortschatz umfasst 80 Karten. Karten enthalten vietnamesischen Text, deutsche und englische Bedeutung, Lautbrücke, Silbentrennung, Kontext und Kategorie. Eigene Karten werden mit derselben Form angelegt und in die Wiederholungen eingereiht.
+Der Startwortschatz umfasst 80 Karten. Karten enthalten vietnamesischen Text, deutsche und englische Bedeutung, Lautbrücke, Silbentrennung, Kontext und Kategorie. Eigene Karten werden mit derselben Form angelegt und in die Wiederholungen eingereiht. Zusätzlich gibt es Hörverständnis ohne sichtbaren Text, Mini-Dialoge mit Antwortwahl und Anrede-Situationen; die Hörübungen aktualisieren den lokalen Lernfortschritt der zugrundeliegenden Karte.
 
 ## Lokale Daten
 
@@ -23,6 +24,7 @@ Die App speichert nur einen versionsgebundenen Eintrag in `localStorage` (`chao-
 - persönliche Karten;
 - die gewünschte tägliche Kartenzahl;
 - die ausgewählte Systemstimme.
+- Lernserie und Bestwert der Serie.
 
 Das Zurücksetzen in der App entfernt ausschließlich diesen Eintrag. Änderungen am Schema müssen die bestehende Version entweder sicher lesen können oder einen klaren Migrationspfad erhalten.
 
@@ -67,3 +69,9 @@ Manuell in einem aktuellen Safari und Chrome prüfen:
 `.github/workflows/deploy-pages.yml` veröffentlicht ausschließlich bei einem Push nach `main` oder per manuellem Workflow-Start. Der Workflow verwendet `npm ci`, um exakt den in `package-lock.json` festgelegten Abhängigkeitsbaum einzusetzen, baut mit `npm run build` und lädt `dist/` als GitHub-Pages-Artefakt hoch.
 
 Nach einem Deploy sollten sowohl der erfolgreiche Actions-Lauf als auch die veröffentlichte Seite kontrolliert werden. Für Mikrofonfunktionen muss die Live-Domain HTTPS verwenden.
+
+## PWA und Offline-Verhalten
+
+`public/manifest.webmanifest` beschreibt die installierbare Anwendung. `public/sw.js` registriert einen bewusst kleinen Service Worker: Er speichert die App-Hülle beim Installieren und legt erfolgreich geladene same-origin Ressourcen in einem Laufzeit-Cache ab. Navigationen fallen bei fehlender Verbindung auf die gespeicherte App-Hülle zurück.
+
+Bei Änderungen an Offline-Verhalten oder statischen Kernressourcen muss der Cache-Name in `public/sw.js` erhöht werden. Teste danach einen frischen Erstbesuch, trenne die Verbindung und lade die App erneut. Es gibt keinen Offline-Cache für externe Systemstimmen oder Webfonts; die Lernfunktionen selbst bleiben jedoch bedienbar.

@@ -1,14 +1,14 @@
 import type { Card, StoredState } from './types'
 
 const KEY = 'chao-nha-v1.0'
-const defaults = (): StoredState => ({ version: 1, progress: {}, personalCards: [], goal: 8 })
+const defaults = (): StoredState => ({ version: 2, progress: {}, personalCards: [], goal: 8, stats: { currentStreak: 0, bestStreak: 0 } })
 
 export function loadState(): StoredState {
   try {
     const raw = localStorage.getItem(KEY)
     if (!raw) return defaults()
     const saved = JSON.parse(raw) as Partial<StoredState>
-    return { ...defaults(), ...saved, version: 1, progress: saved.progress ?? {}, personalCards: saved.personalCards ?? [] }
+    return { ...defaults(), ...saved, version: 2, progress: saved.progress ?? {}, personalCards: saved.personalCards ?? [], stats: saved.stats ?? defaults().stats }
   } catch { return defaults() }
 }
 

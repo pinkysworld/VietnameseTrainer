@@ -15,7 +15,10 @@ Ein freundlicher, mobiler Browser-Trainer für Menschen, die süd-vietnamesische
 - Vietnamesische System-Sprachausgabe in normalem und langsamem Tempo.
 - Aufnahme und Wiedergabe der eigenen Aussprache direkt im Browser – ohne automatische, potenziell irreführende Bewertung.
 - Kurze Tagesrunden mit lokalen Wiederholungen.
+- Einstellbare Tagesziele, Lernserie, Themenfortschritt und Markierung häufig schwieriger Karten.
+- Hörverständnis ohne sichtbaren Text, Mini-Dialoge und ein Anrede-Trainer für typische Gesprächssituationen.
 - Eigene Karten für Vokabeln, Namen und Formulierungen aus dem persönlichen Alltag.
+- Als Progressive Web App installierbar und nach dem ersten Besuch offline nutzbar.
 
 ## Schnellstart
 
@@ -44,6 +47,7 @@ npm run preview
 3. Nimm deinen Versuch auf und höre ihn direkt neben dem Vorbild an.
 4. Tippe oben rechts auf den Stimmnamen, um eine andere vietnamesische Systemstimme auszuwählen. Die Auswahl bleibt auf diesem Gerät erhalten.
 5. Ergänze im Bereich **Eigene** Wörter, die für dich besonders relevant sind.
+6. Nutze **Hören**, **Dialoge** und **Anreden**, um Wörter im Zusammenhang statt nur als Karte zu üben.
 
 Die App vermittelt nützliche Aussprache- und Wortschatzgrundlagen; sie ersetzt keine muttersprachliche Rückmeldung. Vietnamesische Anreden hängen von Alter, Beziehung und Kontext ab – die Karten weisen darauf hin, wenn eine Anpassung nötig ist.
 
@@ -54,6 +58,12 @@ Die App vermittelt nützliche Aussprache- und Wortschatzgrundlagen; sie ersetzt 
 - Aufnahmen werden nur temporär im Browser gehalten und beim Neuladen nicht gespeichert oder übertragen.
 - Das Mikrofon wird erst nach einem bewussten Tipp auf **Aufnehmen** angefragt. Es funktioniert zuverlässig nur auf `localhost` oder über HTTPS.
 - Die Sprachausgabe nutzt ausschließlich die installierten Systemstimmen des Geräts. Qualität und verfügbare Stimmen unterscheiden sich je nach Browser und Betriebssystem.
+
+## Offline und Installation
+
+Nach dem ersten vollständigen Besuch speichert die App ihre Oberfläche und Lerninhalte für die Offline-Nutzung. In unterstützten Browsern erscheint der Button **Auf dem Handy installieren**. Auf iPhone/iPad lässt sie sich über Safari mit **Teilen → Zum Home-Bildschirm** hinzufügen.
+
+Persönliche Daten bleiben weiterhin browserlokal. Ein Wechsel des Browsers oder ein Löschen von Website-Daten entfernt sie; eine Synchronisierung ist bewusst nicht Teil der aktuellen Version.
 
 ## GitHub Pages
 
